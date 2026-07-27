@@ -69,32 +69,6 @@ export async function createAppointment(payload) {
   return record;
 }
 
-export async function updateAppointmentStatus(id, status) {
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .update({ status })
-        .eq('id', id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    } catch {
-      // segue para fallback local
-    }
-  }
-
-  const list = readLocal();
-  const idx = list.findIndex((a) => a.id === id);
-  if (idx >= 0) {
-    list[idx].status = status;
-    writeLocal(list);
-    return list[idx];
-  }
-  return null;
-}
-
 export async function updateAppointmentPaid(id, paid) {
   if (isSupabaseConfigured) {
     try {

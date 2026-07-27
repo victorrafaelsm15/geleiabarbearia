@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Tabs, Table, Badge, Button, ActionIcon, Select, TextInput, NumberInput, Group, Loader } from '@mantine/core';
+import { Tabs, Table, Switch, Button, ActionIcon, TextInput, NumberInput, Group, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { LogOut, Trash2, Plus, CalendarCheck, Scissors } from 'lucide-react';
 import { logout } from '../lib/authService';
-import { listAppointments, updateAppointmentStatus, updateAppointmentPaid, deleteAppointment } from '../lib/appointmentsService';
+import { listAppointments, updateAppointmentPaid, deleteAppointment } from '../lib/appointmentsService';
 import { listServices, upsertService, deleteService } from '../lib/servicesStore';
 import styles from './AdminDashboard.module.css';
-
-const STATUS_COLORS = { pendente: 'yellow', confirmado: 'green', concluido: 'blue', cancelado: 'red' };
-const STATUS_OPTIONS = ['pendente', 'confirmado', 'concluido', 'cancelado'];
 
 function groupByDate(appointments) {
   const map = new Map();
@@ -36,11 +33,6 @@ function AppointmentsTab() {
   };
 
   useEffect(load, []);
-
-  const handleStatusChange = async (id, status) => {
-    await updateAppointmentStatus(id, status);
-    load();
-  };
 
   const handleTogglePaid = async (id, paid) => {
     await updateAppointmentPaid(id, !paid);
@@ -70,7 +62,6 @@ function AppointmentsTab() {
                 <Table.Th>Cliente</Table.Th>
                 <Table.Th>Serviço</Table.Th>
                 <Table.Th>Hora</Table.Th>
-                <Table.Th>Status</Table.Th>
                 <Table.Th>Pagamento</Table.Th>
                 <Table.Th></Table.Th>
               </Table.Tr>
@@ -85,24 +76,14 @@ function AppointmentsTab() {
                   <Table.Td>{a.service_name}</Table.Td>
                   <Table.Td>{a.time}</Table.Td>
                   <Table.Td>
-                    <Select
-                      size="xs"
-                      data={STATUS_OPTIONS}
-                      value={a.status}
-                      onChange={(v) => handleStatusChange(a.id, v)}
-                      w={130}
+                    <Switch
+                      checked={!!a.paid}
+                      onChange={() => handleTogglePaid(a.id, a.paid)}
+                      color="green"
+                      onLabel="Pago"
+                      offLabel="Não pago"
+                      size="md"
                     />
-                  </Table.Td>
-                  <Table.Td>
-                    <Badge
-                      component="button"
-                      onClick={() => handleTogglePaid(a.id, a.paid)}
-                      color={a.paid ? 'green' : 'gray'}
-                      variant={a.paid ? 'filled' : 'outline'}
-                      className={styles.paidBadge}
-                    >
-                      {a.paid ? 'Pago' : 'Não pago'}
-                    </Badge>
                   </Table.Td>
                   <Table.Td>
                     <ActionIcon color="red" variant="subtle" onClick={() => handleDelete(a.id)}>
