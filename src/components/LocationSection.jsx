@@ -4,7 +4,7 @@ import { siteInfo, businessHours, weekdayLabels } from '../data/siteContent';
 import styles from './LocationSection.module.css';
 
 export default function LocationSection() {
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteInfo.address)}`;
+  const mapsUrl = 'https://maps.app.goo.gl/1MJHtMjZgKXHEDrz9?g_st=iw';
 
   return (
     <section className={`section ${styles.section}`} id="local">
