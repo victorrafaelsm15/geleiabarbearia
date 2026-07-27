@@ -80,8 +80,9 @@ export async function updateAppointmentPaid(id, paid) {
         .single();
       if (error) throw error;
       return data;
-    } catch {
-      // segue para fallback local
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Falha ao salvar pagamento no Supabase (verifique se a coluna "paid" existe na tabela appointments):', err);
     }
   }
 
