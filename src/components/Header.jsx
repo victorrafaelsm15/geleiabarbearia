@@ -25,7 +25,7 @@ export default function Header() {
 
         <div className={styles.actions}>
           <a href={siteInfo.instagramUrl} target="_blank" rel="noreferrer" className={styles.instagramBtn}>
-            <IconBrandInstagram size={20} /> {siteInfo.instagram}
+            <IconBrandInstagram size={20} /> <span className={styles.btnLabel}>{siteInfo.instagram}</span>
           </a>
           <a
             href={`https://wa.me/${siteInfo.whatsapp}`}
@@ -33,7 +33,7 @@ export default function Header() {
             rel="noreferrer"
             className={styles.whatsappBtn}
           >
-            <MessageCircle size={16} /> WhatsApp
+            <MessageCircle size={16} /> <span className={styles.btnLabel}>WhatsApp</span>
           </a>
         </div>
       </div>

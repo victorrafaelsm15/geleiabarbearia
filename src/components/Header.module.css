@@ -68,6 +68,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
 }
 
 .instagramBtn {
@@ -94,4 +95,30 @@
   font-size: 13.5px;
   padding: 9px 16px;
   border-radius: 100px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .inner {
+    height: 64px;
+  }
+
+  .logo { gap: 8px; }
+
+  .logoMark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logoText { font-size: 15px; }
+
+  .logoSub { display: none; }
+
+  .actions { gap: 8px; }
+
+  .instagramBtn, .whatsappBtn {
+    padding: 8px 10px;
+  }
+
+  .btnLabel { display: none; }
 }
