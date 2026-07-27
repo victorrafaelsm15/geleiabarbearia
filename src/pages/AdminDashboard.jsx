@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Tabs, Table, Switch, Button, ActionIcon, TextInput, NumberInput, Group, Loader } from '@mantine/core';
+import { Tabs, Table, Select, Button, ActionIcon, TextInput, NumberInput, Group, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { LogOut, Trash2, Plus, CalendarCheck, Scissors } from 'lucide-react';
 import { logout } from '../lib/authService';
@@ -34,8 +34,8 @@ function AppointmentsTab() {
 
   useEffect(load, []);
 
-  const handleTogglePaid = async (id, paid) => {
-    await updateAppointmentPaid(id, !paid);
+  const handlePaidChange = async (id, value) => {
+    await updateAppointmentPaid(id, value === 'pago');
     load();
   };
 
@@ -76,13 +76,17 @@ function AppointmentsTab() {
                   <Table.Td>{a.service_name}</Table.Td>
                   <Table.Td>{a.time}</Table.Td>
                   <Table.Td>
-                    <Switch
-                      checked={!!a.paid}
-                      onChange={() => handleTogglePaid(a.id, a.paid)}
-                      color="green"
-                      onLabel="Pago"
-                      offLabel="Não pago"
-                      size="md"
+                    <Select
+                      size="xs"
+                      data={[
+                        { value: 'pago', label: 'Pago' },
+                        { value: 'nao_pago', label: 'Não pago' },
+                      ]}
+                      value={a.paid ? 'pago' : 'nao_pago'}
+                      onChange={(v) => handlePaidChange(a.id, v)}
+                      allowDeselect={false}
+                      w={130}
+                      className={a.paid ? styles.paidSelect : styles.unpaidSelect}
                     />
                   </Table.Td>
                   <Table.Td>
