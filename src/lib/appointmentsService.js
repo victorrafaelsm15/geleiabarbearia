@@ -95,6 +95,32 @@ export async function updateAppointmentStatus(id, status) {
   return null;
 }
 
+export async function updateAppointmentPaid(id, paid) {
+  if (isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('appointments')
+        .update({ paid })
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    } catch {
+      // segue para fallback local
+    }
+  }
+
+  const list = readLocal();
+  const idx = list.findIndex((a) => a.id === id);
+  if (idx >= 0) {
+    list[idx].paid = paid;
+    writeLocal(list);
+    return list[idx];
+  }
+  return null;
+}
+
 export async function deleteAppointment(id) {
   if (isSupabaseConfigured) {
     try {

@@ -4,12 +4,27 @@ import { Tabs, Table, Badge, Button, ActionIcon, Select, TextInput, NumberInput,
 import { notifications } from '@mantine/notifications';
 import { LogOut, Trash2, Plus, CalendarCheck, Scissors } from 'lucide-react';
 import { logout } from '../lib/authService';
-import { listAppointments, updateAppointmentStatus, deleteAppointment } from '../lib/appointmentsService';
+import { listAppointments, updateAppointmentStatus, updateAppointmentPaid, deleteAppointment } from '../lib/appointmentsService';
 import { listServices, upsertService, deleteService } from '../lib/servicesStore';
 import styles from './AdminDashboard.module.css';
 
 const STATUS_COLORS = { pendente: 'yellow', confirmado: 'green', concluido: 'blue', cancelado: 'red' };
 const STATUS_OPTIONS = ['pendente', 'confirmado', 'concluido', 'cancelado'];
+
+function groupByDate(appointments) {
+  const map = new Map();
+  for (const a of appointments) {
+    if (!map.has(a.date)) map.set(a.date, []);
+    map.get(a.date).push(a);
+  }
+  return [...map.entries()];
+}
+
+function formatDayHeading(dateKey) {
+  const d = new Date(dateKey + 'T00:00:00');
+  const weekday = d.toLocaleDateString('pt-BR', { weekday: 'long' });
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${d.toLocaleDateString('pt-BR')}`;
+}
 
 function AppointmentsTab() {
   const [appointments, setAppointments] = useState([]);
@@ -27,6 +42,11 @@ function AppointmentsTab() {
     load();
   };
 
+  const handleTogglePaid = async (id, paid) => {
+    await updateAppointmentPaid(id, !paid);
+    load();
+  };
+
   const handleDelete = async (id) => {
     await deleteAppointment(id);
     notifications.show({ message: 'Agendamento removido.', color: 'gray' });
@@ -40,45 +60,62 @@ function AppointmentsTab() {
   }
 
   return (
-    <Table verticalSpacing="sm" className={styles.table}>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Cliente</Table.Th>
-          <Table.Th>Serviço</Table.Th>
-          <Table.Th>Data</Table.Th>
-          <Table.Th>Hora</Table.Th>
-          <Table.Th>Status</Table.Th>
-          <Table.Th></Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {appointments.map((a) => (
-          <Table.Tr key={a.id}>
-            <Table.Td>
-              <div>{a.client_name}</div>
-              <div className={styles.subtle}>{a.client_phone}</div>
-            </Table.Td>
-            <Table.Td>{a.service_name}</Table.Td>
-            <Table.Td>{new Date(a.date + 'T00:00:00').toLocaleDateString('pt-BR')}</Table.Td>
-            <Table.Td>{a.time}</Table.Td>
-            <Table.Td>
-              <Select
-                size="xs"
-                data={STATUS_OPTIONS}
-                value={a.status}
-                onChange={(v) => handleStatusChange(a.id, v)}
-                w={130}
-              />
-            </Table.Td>
-            <Table.Td>
-              <ActionIcon color="red" variant="subtle" onClick={() => handleDelete(a.id)}>
-                <Trash2 size={16} />
-              </ActionIcon>
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+    <div className={styles.dayGroups}>
+      {groupByDate(appointments).map(([date, items]) => (
+        <div key={date} className={styles.dayGroup}>
+          <h3 className={styles.dayHeading}>{formatDayHeading(date)}</h3>
+          <Table verticalSpacing="sm" className={styles.table}>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Cliente</Table.Th>
+                <Table.Th>Serviço</Table.Th>
+                <Table.Th>Hora</Table.Th>
+                <Table.Th>Status</Table.Th>
+                <Table.Th>Pagamento</Table.Th>
+                <Table.Th></Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {items.map((a) => (
+                <Table.Tr key={a.id}>
+                  <Table.Td>
+                    <div>{a.client_name}</div>
+                    <div className={styles.subtle}>{a.client_phone}</div>
+                  </Table.Td>
+                  <Table.Td>{a.service_name}</Table.Td>
+                  <Table.Td>{a.time}</Table.Td>
+                  <Table.Td>
+                    <Select
+                      size="xs"
+                      data={STATUS_OPTIONS}
+                      value={a.status}
+                      onChange={(v) => handleStatusChange(a.id, v)}
+                      w={130}
+                    />
+                  </Table.Td>
+                  <Table.Td>
+                    <Badge
+                      component="button"
+                      onClick={() => handleTogglePaid(a.id, a.paid)}
+                      color={a.paid ? 'green' : 'gray'}
+                      variant={a.paid ? 'filled' : 'outline'}
+                      className={styles.paidBadge}
+                    >
+                      {a.paid ? 'Pago' : 'Não pago'}
+                    </Badge>
+                  </Table.Td>
+                  <Table.Td>
+                    <ActionIcon color="red" variant="subtle" onClick={() => handleDelete(a.id)}>
+                      <Trash2 size={16} />
+                    </ActionIcon>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        </div>
+      ))}
+    </div>
   );
 }
 
