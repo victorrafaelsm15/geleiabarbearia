@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications position="top-right" />
-      <BrowserRouter>
+      <BrowserRouter basename="/geleiabarbearia">
         <App />
       </BrowserRouter>
     </MantineProvider>
