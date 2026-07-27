@@ -1,0 +1,190 @@
+.section {
+  padding-top: 40px;
+  background:
+    radial-gradient(circle at 85% 0%, rgba(224,30,30,0.12), transparent 45%),
+    var(--bg);
+}
+
+.headingRow {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 32px;
+}
+
+.heading {
+  margin: 10px 0 12px;
+}
+
+.card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.block { display: flex; flex-direction: column; gap: 12px; }
+
+.blockLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--red-soft);
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.serviceChip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 16px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.serviceChip:hover { border-color: rgba(224,30,30,0.4); }
+
+.serviceChipActive {
+  background: rgba(224,30,30,0.14);
+  border-color: var(--red);
+}
+
+.servicePrice {
+  color: var(--red-soft);
+  font-weight: 700;
+}
+
+.dayScroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.dayChip {
+  flex-shrink: 0;
+  width: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 0;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.dayChipActive {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.dayWeekday {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.dayNumber {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.slotChip {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 0;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.slotChipActive {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.noSlots {
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .formRow, .serviceGrid { grid-template-columns: 1fr; }
+  .slotGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .card { padding: 20px; }
+}
+
+.successBox {
+  max-width: 480px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+}
+
+.successTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: #fff;
+  margin: 8px 0 0;
+}
+
+.successText {
+  font-size: 16px;
+  color: var(--red-soft);
+  font-weight: 700;
+  margin: 0;
+}
+
+.successSub {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin: 0 0 12px;
+}
+
+.successActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
