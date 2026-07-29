@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tabs, Table, Select, Button, ActionIcon, TextInput, NumberInput, Group, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { LogOut, Trash2, Plus, CalendarCheck, Scissors } from 'lucide-react';
+import { IconBrandWhatsapp } from '@tabler/icons-react';
 import { logout } from '../lib/authService';
 import { listAppointments, updateAppointmentPaid, deleteAppointment } from '../lib/appointmentsService';
 import { listServices, upsertService, deleteService } from '../lib/servicesStore';
@@ -21,6 +22,12 @@ function formatDayHeading(dateKey) {
   const d = new Date(dateKey + 'T00:00:00');
   const weekday = d.toLocaleDateString('pt-BR', { weekday: 'long' });
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${d.toLocaleDateString('pt-BR')}`;
+}
+
+function clientWhatsappLink(phone) {
+  const digits = (phone || '').replace(/\D/g, '');
+  const withCountryCode = digits.startsWith('55') ? digits : `55${digits}`;
+  return `https://wa.me/${withCountryCode}`;
 }
 
 function AppointmentsTab() {
@@ -71,7 +78,21 @@ function AppointmentsTab() {
                 <Table.Tr key={a.id}>
                   <Table.Td>
                     <div>{a.client_name}</div>
-                    <div className={styles.subtle}>{a.client_phone}</div>
+                    <div className={styles.phoneRow}>
+                      <span className={styles.subtle}>{a.client_phone}</span>
+                      <ActionIcon
+                        component="a"
+                        href={clientWhatsappLink(a.client_phone)}
+                        target="_blank"
+                        rel="noreferrer"
+                        color="green"
+                        variant="light"
+                        size="sm"
+                        title="Chamar cliente no WhatsApp"
+                      >
+                        <IconBrandWhatsapp size={14} />
+                      </ActionIcon>
+                    </div>
                   </Table.Td>
                   <Table.Td>{a.service_name}</Table.Td>
                   <Table.Td>{a.time}</Table.Td>

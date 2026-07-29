@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
-import { IconBrandInstagram } from '@tabler/icons-react';
+import { IconBrandInstagram, IconBrandWhatsapp } from '@tabler/icons-react';
 import { siteInfo } from '../data/siteContent';
 import logo from '../assets/img/logo.png';
 import styles from './Header.module.css';
@@ -33,7 +32,7 @@ export default function Header() {
             rel="noreferrer"
             className={styles.whatsappBtn}
           >
-            <MessageCircle size={16} /> <span className={styles.btnLabel}>WhatsApp</span>
+            <IconBrandWhatsapp size={18} /> <span className={styles.btnLabel}>WhatsApp</span>
           </a>
         </div>
       </div>

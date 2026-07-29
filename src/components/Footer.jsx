@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
-import { IconBrandInstagram } from '@tabler/icons-react';
+import { IconBrandInstagram, IconBrandWhatsapp } from '@tabler/icons-react';
 import { siteInfo } from '../data/siteContent';
 import logo from '../assets/img/logo.png';
 import styles from './Footer.module.css';
@@ -18,7 +17,7 @@ export default function Footer() {
             <IconBrandInstagram size={20} /> {siteInfo.instagram}
           </a>
           <a href={`https://wa.me/${siteInfo.whatsapp}`} target="_blank" rel="noreferrer" className={styles.waIconLink}>
-            <MessageCircle size={18} />
+            <IconBrandWhatsapp size={20} />
           </a>
         </div>
         <span className={styles.copy}>© {new Date().getFullYear()} Geleia Barber Club</span>
